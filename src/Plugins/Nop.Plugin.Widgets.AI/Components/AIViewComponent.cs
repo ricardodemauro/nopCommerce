@@ -24,11 +24,11 @@ namespace Nop.Plugin.Widgets.AI.Components
         private readonly AIConfiguration _aiConfiguration;
         private readonly ICacheManager _cacheManager;
 
-        private readonly JsonSerializerSettings _jSettings = new JsonSerializerSettings()
+        private readonly Lazy<JsonSerializerSettings> _jSettings = new Lazy<JsonSerializerSettings>(() => new JsonSerializerSettings()
         {
             Formatting = Formatting.Indented,
             ContractResolver = new CamelCasePropertyNamesContractResolver()
-        };
+        }, true);
 
         public AIViewComponent(ILogger<AIViewComponent> logger, AISettings setting, IOptions<AIConfiguration> aiConfiguration, ICacheManager cacheManager)
         {
@@ -61,7 +61,7 @@ namespace Nop.Plugin.Widgets.AI.Components
                         if (_setting.MaxAjaxCallsPerView >= 0)
                             jsAiSetting.MaxAjaxCallsPerView = _setting.MaxAjaxCallsPerView;
 
-                        return JsonConvert.SerializeObject(jsAiSetting, _jSettings);
+                        return JsonConvert.SerializeObject(jsAiSetting, _jSettings.Value);
                     }, null);
                     content = settingCached;
                 }
