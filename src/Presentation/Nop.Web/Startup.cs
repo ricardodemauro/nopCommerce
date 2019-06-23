@@ -33,10 +33,11 @@ namespace Nop.Web
         {
             _logger.LogInformation("Start of ConfigureServices");
 
-            services.AddApplicationInsightsTelemetry();
+            if (!_hostingEnvironment.IsDevelopment())
+                services.AddApplicationInsightsTelemetry();
 
             var svcs = services.ConfigureApplicationServices(_configuration, _hostingEnvironment, _logger);
-            
+
             _logger.LogInformation("End of ConfigureServices");
 
             return svcs;

@@ -60,7 +60,8 @@ namespace Nop.Web
         {
             webHostBuilder.ConfigureServices((ctx, collection) =>
             {
-                collection.AddApplicationInsightsTelemetry(ctx.Configuration["ApplicationInsights:InstrumentationKey"]);
+                if (!ctx.HostingEnvironment.IsDevelopment())
+                    collection.AddApplicationInsightsTelemetry(ctx.Configuration["ApplicationInsights:InstrumentationKey"]);
             });
             return webHostBuilder;
         }
